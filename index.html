@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dra. Andressa Odontologia - Seu Sorriso em Boas Mãos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">🦷</span>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900">Dra. Andressa Odontologia</h1>
+                        <p class="text-sm text-gray-600">Cuidando do seu sorriso</p>
+                    </div>
+                </div>
+                <nav class="hidden md:flex space-x-4 lg:space-x-8 items-center">
+                    <a href="#inicio" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Início</a>
+                    <a href="#servicos" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Serviços</a>
+                    <a href="#sobre" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Sobre</a>
+                    <a href="#agendamento" class="bg-blue-600 text-white px-4 lg:px-6 py-2 rounded-full hover:bg-blue-700 transition-colors text-sm lg:text-base">Agendar</a>
+                    <button id="loginBtn" onclick="handleLoginClick()" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">
+                        <span id="loginBtnText">👤 Login</span>
+                    </button>
+                </nav>
+                
+                <!-- Mobile menu button -->
+                <button id="mobileMenuBtn" onclick="toggleMobileMenu()" class="md:hidden text-gray-700 hover:text-blue-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-200">
+                <div class="px-4 py-4 space-y-3">
+                    <a href="#inicio" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors py-2">Início</a>
+                    <a href="#servicos" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors py-2">Serviços</a>
+                    <a href="#sobre" class="block text-gray-700 hover:text-blue-600 font-medium transition-colors py-2">Sobre</a>
+                    <a href="#agendamento" class="block bg-blue-600 text-white px-4 py-3 rounded-full hover:bg-blue-700 transition-colors text-center">Agendar</a>
+                    <button onclick="handleLoginClick()" class="block w-full text-left text-gray-700 hover:text-blue-600 font-medium transition-colors py-2">
+                        <span id="mobileLoginBtnText">👤 Login</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Modal de Login/Cadastro -->
+    <div id="loginModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl shadow-xl w-full max-w-sm sm:max-w-md lg:max-w-lg xl:max-w-xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl">👤</span>
+                </div>
+                <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Área do Paciente</h2>
+                <p id="modalSubtitle" class="text-gray-600">Acesse sua conta para ver seus agendamentos</p>
+            </div>
+            
+            <!-- Abas Login/Cadastro/Admin -->
+            <div class="flex mb-6 bg-gray-100 rounded-xl p-1">
+                <button id="loginTab" onclick="switchTab('login')" class="flex-1 py-2 px-2 text-sm rounded-lg font-medium transition-colors bg-white text-blue-600 shadow-sm">
+                    Paciente
+                </button>
+                <button id="registerTab" onclick="switchTab('register')" class="flex-1 py-2 px-2 text-sm rounded-lg font-medium transition-colors text-gray-600 hover:text-gray-900">
+                    Cadastrar
+                </button>
+                <button id="adminTab" onclick="switchTab('admin')" class="flex-1 py-2 px-2 text-sm rounded-lg font-medium transition-colors text-gray-600 hover:text-gray-900">
+                    Doutor
+                </button>
+            </div>
+            
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                    <input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="seu@email.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                    <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Sua senha">
+                </div>
+                
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                    Entrar
+                </button>
+            </form>
+            
+            <!-- Formulário de Cadastro -->
+            <form id="registerForm" class="hidden space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo</label>
+                    <input type="text" id="registerName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Seu nome completo">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                    <input type="email" id="registerEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="seu@email.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
+                    <input type="tel" id="registerPhone" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="(11) 99999-9999">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                    <input type="password" id="registerPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Crie uma senha">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Confirmar Senha</label>
+                    <input type="password" id="registerConfirmPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Confirme sua senha">
+                </div>
+                
+                <button type="submit" class="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-700 transition-colors">
+                    Criar Conta
+                </button>
+            </form>
+            
+            <!-- Formulário de Login Administrativo -->
+            <form id="adminForm" class="hidden space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email Profissional</label>
+                    <input type="email" id="adminEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all" placeholder="doutor@clinica.com">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Senha</label>
+                    <input type="password" id="adminPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all" placeholder="Sua senha">
+                </div>
+                
+                <button type="submit" class="w-full bg-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-purple-700 transition-colors">
+                    Acessar Painel
+                </button>
+            </form>
+            
+            <div class="mt-6 text-center">
+                <button onclick="hideLogin()" class="text-gray-500 hover:text-gray-700 transition-colors">Fechar</button>
+            </div>
+            
+            <!-- Dados de exemplo para demonstração -->
+            <div id="demoData" class="mt-6 p-4 bg-gray-50 rounded-xl">
+                <p class="text-xs text-gray-600 font-semibold mb-2">Para demonstração, use:</p>
+                <div id="patientDemo" class="text-xs text-gray-600">
+                    <p><strong>Paciente:</strong> paciente@exemplo.com | Senha: 123456</p>
+                </div>
+                <div id="adminDemo" class="hidden text-xs text-gray-600">
+                    <p><strong>Dra. Andressa:</strong> dra.andressa@clinica.com | Senha: admin123</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="gradient-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-5xl font-bold mb-6 leading-tight">Seu Sorriso Perfeito Começa Aqui</h2>
+                    <p class="text-xl mb-8 text-blue-100">Tratamentos odontológicos de qualidade com tecnologia avançada e atendimento humanizado.</p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <button onclick="scrollToAgendamento()" class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-colors">
+                            Agendar Consulta
+                        </button>
+                        <button class="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-blue-600 transition-colors">
+                            Nossos Serviços
+                        </button>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <div class="bg-white bg-opacity-20 rounded-3xl p-8 backdrop-blur-sm">
+                        <div class="text-8xl mb-4">😊</div>
+                        <h3 class="text-2xl font-semibold mb-2">Mais de 1000</h3>
+                        <p class="text-blue-100">Sorrisos transformados</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços -->
+    <section id="servicos" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Nossos Serviços</h2>
+                <p class="text-xl text-gray-600">Oferecemos tratamentos completos para toda a família</p>
+            </div>
+            <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">🦷</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Restauração</h3>
+                    <p class="text-gray-600 text-sm">Restaurações em resina composta para devolver função e estética aos dentes.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">🧽</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Limpeza</h3>
+                    <p class="text-gray-600 text-sm">Profilaxia profissional para remoção de tártaro e manutenção da saúde bucal.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">✨</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Clareamento</h3>
+                    <p class="text-gray-600 text-sm">Clareamento dental para deixar seu sorriso mais branco e radiante.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">🎨</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Facetas em Resina</h3>
+                    <p class="text-gray-600 text-sm">Facetas em resina composta para transformar completamente seu sorriso.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">🔧</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Cirurgia Oral</h3>
+                    <p class="text-gray-600 text-sm">Extrações e procedimentos cirúrgicos orais com segurança e conforto.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">💉</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Botox</h3>
+                    <p class="text-gray-600 text-sm">Aplicação de toxina botulínica para harmonização facial e tratamento do bruxismo.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">💋</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Preenchimento Labial</h3>
+                    <p class="text-gray-600 text-sm">Preenchimento com ácido hialurônico para lábios mais volumosos e definidos.</p>
+                </div>
+                <div class="bg-gray-50 rounded-2xl p-6 card-hover">
+                    <div class="text-3xl mb-3">🦷</div>
+                    <h3 class="text-lg font-semibold mb-2 text-gray-900">Ortodontia</h3>
+                    <p class="text-gray-600 text-sm">Aparelhos fixos e móveis para alinhamento e correção da mordida.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Agendamento -->
+    <section id="agendamento" class="py-20 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl font-bold text-gray-900 mb-4">Agende sua Consulta</h2>
+                <p class="text-xl text-gray-600">Preencha o formulário abaixo para solicitar seu agendamento.</p>
+            </div>
+            
+            <div class="bg-white rounded-3xl shadow-lg p-8">
+                <form id="agendamentoForm" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome Completo</label>
+                            <input type="text" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Seu nome">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                            <input type="email" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="seu@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Telefone</label>
+                            <input type="tel" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="(11) 99999-9999">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Tipo de Tratamento</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                <option value="">Selecione o tratamento</option>
+                                <option value="Restauração">Restauração</option>
+                                <option value="Limpeza">Limpeza</option>
+                                <option value="Clareamento">Clareamento</option>
+                                <option value="Facetas em Resina">Facetas em Resina</option>
+                                <option value="Cirurgia Oral">Cirurgia Oral</option>
+                                <option value="Botox">Botox</option>
+                                <option value="Preenchimento Labial">Preenchimento Labial</option>
+                                <option value="Ortodontia">Ortodontia</option>
+                                <option value="Avaliação">Avaliação</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Data Preferencial</label>
+                            <input type="date" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Horário Preferencial</label>
+                            <select required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                                <option value="">Selecione um horário</option>
+                                <option value="09:00">09:00</option>
+                                <option value="10:00">10:00</option>
+                                <option value="11:00">11:00</option>
+                                <option value="12:00">12:00</option>
+                                <option value="13:00">13:00</option>
+                                <option value="14:00">14:00</option>
+                                <option value="15:00">15:00</option>
+                                <option value="16:00">16:00</option>
+                                <option value="17:00">17:00</option>
+                                <option value="18:00">18:00</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Observações</label>
+                        <textarea rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" placeholder="Alguma informação adicional?"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-semibold hover:bg-blue-700 transition-colors text-lg">
+                        Solicitar Agendamento
+                    </button>
+                </form>
+                
+                <div id="successMessage" class="hidden text-center py-12">
+                    <div class="text-6xl mb-4">✅</div>
+                    <h3 class="text-2xl font-semibold text-gray-900 mb-2">Solicitação Enviada!</h3>
+                    <p class="text-gray-600">Sua solicitação de agendamento foi enviada com sucesso. Entraremos em contato em breve para confirmar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="order-2 md:order-1">
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Conheça a Dra. Andressa</h2>
+                    <p class="text-lg text-gray-600 mb-6">Com mais de 10 anos de experiência, a Dra. Andressa é apaixonada por transformar sorrisos e melhorar a autoestima de seus pacientes. Especialista em odontologia estética e harmonização facial, ela está sempre se atualizando com as técnicas mais modernas do mercado.</p>
+                    <div class="bg-blue-50 rounded-2xl p-6 flex items-start space-x-4">
+                        <div class="text-2xl">💬</div>
+                        <div>
+                            <p class="text-gray-800 font-medium">"Meu objetivo é oferecer um tratamento personalizado e de alta qualidade, sempre com foco no bem-estar e na satisfação do paciente."</p>
+                            <p class="text-gray-600 mt-2">- Dra. Andressa</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-1 md:order-2 text-center">
+                    <div class="inline-block relative">
+                        <div class="w-64 h-64 rounded-full bg-blue-200 mx-auto"></div>
+                        <div class="absolute inset-0 flex items-center justify-center text-8xl">👩‍⚕️</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WhatsApp Flutuante -->
+    <div class="fixed bottom-6 right-6 z-40">
+        <div id="whatsappMenu" class="hidden absolute bottom-full right-0 mb-3 w-64 bg-white rounded-2xl shadow-lg border border-gray-200 p-4 space-y-3">
+            <button onclick="sendWhatsAppMessage('Olá! Gostaria de agendar uma consulta.')" class="w-full text-left bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors text-sm text-gray-800">Agendar consulta</button>
+            <button onclick="sendWhatsAppMessage('Olá! Tenho uma dúvida sobre os tratamentos.')" class="w-full text-left bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors text-sm text-gray-800">Tirar uma dúvida</button>
+            <button onclick="openInstagram()" class="w-full text-left bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition-colors text-sm text-gray-800">Ver no Instagram</button>
+        </div>
+        <button id="whatsappButton" onclick="toggleWhatsApp()" class="bg-green-500 text-white w-16 h-16 rounded-full shadow-xl flex items-center justify-center hover:bg-green-600 transition-transform transform hover:scale-110">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.267.655 4.398 1.908 6.161l.219.324-1.125 4.108 4.224-1.104.306.216z" />
+            </svg>
+        </button>
+    </div>
+
+    <!-- Botão de Ação Rápida -->
+    <div class="fixed bottom-24 right-6 z-40 md:hidden">
+        <button onclick="scrollToAgendamento()" class="bg-blue-600 text-white px-5 py-3 rounded-full shadow-lg flex items-center space-x-2 hover:bg-blue-700 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z
+"></path>
+            </svg>
+            <span class="text-sm font-medium">Agendar</span>
+        </button>
+    </div>
+
+    <!-- Toast de Notificação -->
+    <div id="toast" class="hidden fixed top-24 right-6 bg-gray-900 text-white px-6 py-3 rounded-xl shadow-lg z-50 transition-transform transform translate-x-full">
+        <p id="toastMessage"></p>
+    </div>
+
+    <!-- Modal de Confirmação de Cancelamento (Admin) -->
+    <div id="adminCancelModalContainer"></div>
+
+    <!-- Modal de Confirmação de Cancelamento (Paciente) -->
+    <div id="patientCancelModalContainer"></div>
+
+    <!-- Contato Rápido -->
+    <div class="fixed bottom-6 left-6 z-40 hidden md:block">
+        <div class="flex items-center space-x-3 bg-white shadow-lg rounded-full p-2">
+            <div class="text-sm text-gray-600 font-medium px-3">Fale conosco:</div>
+            <button onclick="sendWhatsAppMessage('Olá! Gostaria de tirar uma dúvida.')" class="bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                <div class="text-xl">💬</div>
+            </button>
+            <button onclick="openInstagram()" class="bg-gray-100 w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                <div class="text-xl">📸</div>
+            </button>
+            <button onclick="scrollToAgendamento()" class="bg-blue-600 text-white w-28 h-10 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors">
+                <div class="text-sm text-gray-600">Falar conosco</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-3 gap-8">
+                <div>
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
+                            <span class="text-white font-bold">🦷</span>
+                        </div>
+                        <span class="text-xl font-bold">Dra. Andressa Odontologia</span>
+                    </div>
+                    <p class="text-gray-400">Cuidando do seu sorriso com excelência e dedicação.</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Contato</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p>📍 Rua Miguel Langone, 296</p>
+                        <p>📞 (11) 3456-7890</p>
+                        <p>📧 contato@draandressa.com.br</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold mb-4">Horários</h4>
+                    <div class="space-y-2 text-gray-400">
+                        <p>Segunda a Sexta: 9h às 19h</p>
+                        <p>Sábado: 9h às 13h</p>
+                        <p>Domingo: Fechado</p>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Dra. Andressa Odontologia. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Painel Administrativo -->
+    <div id="adminDashboard" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl shadow-xl w-full max-w-6xl max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white rounded-t-3xl border-b border-gray-200 p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Painel Administrativo</h2>
+                        <p id="adminWelcome" class="text-gray-600">Bem-vindo(a), Dra. Andressa!</p>
+                    </div>
+                    <button onclick="hideAdminDashboard()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <!-- Estatísticas -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-blue-50 rounded-2xl p-6 text-center">
+                        <div class="text-3xl mb-2">📅</div>
+                        <h3 class="text-2xl font-bold text-blue-600" id="totalAppointments">0</h3>
+                        <p class="text-blue-800 font-medium">Total de Agendamentos</p>
+                    </div>
+                    <div class="bg-green-50 rounded-2xl p-6 text-center">
+                        <div class="text-3xl mb-2">✅</div>
+                        <h3 class="text-2xl font-bold text-green-600" id="confirmedAppointments">0</h3>
+                        <p class="text-green-800 font-medium">Confirmados</p>
+                    </div>
+                    <div class="bg-yellow-50 rounded-2xl p-6 text-center">
+                        <div class="text-3xl mb-2">⏳</div>
+                        <h3 class="text-2xl font-bold text-yellow-600" id="pendingAppointments">0</h3>
+                        <p class="text-yellow-800 font-medium">Pendentes</p>
+                    </div>
+                    <div class="bg-purple-50 rounded-2xl p-6 text-center">
+                        <div class="text-3xl mb-2">👥</div>
+                        <h3 class="text-2xl font-bold text-purple-600" id="totalPatients">0</h3>
+                        <p class="text-purple-800 font-medium">Pacientes</p>
+                    </div>
+                </div>
+                
+                <!-- Lista de Agendamentos -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-6">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4">Agendamentos</h3>
+                    <div id="adminAppointmentsList" class="space-y-4">
+                        <!-- Agendamentos serão inseridos aqui -->
+                    </div>
+                    
+                    <div id="noAdminAppointments" class="hidden text-center py-12">
+                        <div class="text-6xl mb-4">📋</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">Nenhum agendamento encontrado</h3>
+                        <p class="text-gray-600">Não há agendamentos no momento.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sticky bottom-0 bg-gray-50 rounded-b-3xl p-6 border-t border-gray-200">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Painel de controle da clínica</p>
+                    <button onclick="hideAdminDashboard()" class="bg-gray-600 text-white px-6 py-2 rounded-xl hover:bg-gray-700 transition-colors">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard do Paciente -->
+    <div id="patientDashboard" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white rounded-t-3xl border-b border-gray-200 p-6">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Meus Agendamentos</h2>
+                        <p id="dashboardWelcome" class="text-gray-600">Bem-vindo(a)!</p>
+                        <div id="patientInfo" class="mt-2 text-sm text-gray-500">
+                            <!-- Informações do paciente serão inseridas aqui -->
+                        </div>
+                    </div>
+                    <button onclick="hideDashboard()" class="text-gray-500 hover:text-gray-700 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                <div id="appointmentsList" class="space-y-4">
+                    <!-- Agendamentos serão inseridos aqui dinamicamente -->
+                </div>
+                
+                <div id="noAppointments" class="hidden text-center py-12">
+                    <div class="text-6xl mb-4">📅</div>
+                    <h3 class="text-xl font-semibold text-gray-900 mb-2">Nenhum agendamento encontrado</h3>
+                    <p class="text-gray-600 mb-6">Você ainda não possui agendamentos. Que tal marcar uma consulta?</p>
+                    <button onclick="hideDashboard(); scrollToAgendamento();" class="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                        Agendar Consulta
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sticky bottom-0 bg-gray-50 rounded-b-3xl p-6 border-t border-gray-200">
+                <div class="flex justify-between items-center">
+                    <p class="text-sm text-gray-600">Precisa de ajuda? Entre em contato conosco!</p>
+                    <button onclick="hideDashboard()" class="bg-gray-600 text-white px-6 py-2 rounded-xl hover:bg-gray-700 transition-colors">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Alteração de Data -->
+    <div id="changeDateModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl shadow-xl max-w-md w-full p-6">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span class="text-white text-2xl">📅</span>
+                </div>
+                <h2 class="text-2xl font-bold text-gray-900">Alterar Data</h2>
+                <p class="text-gray-600">Escolha uma nova data para seu agendamento</p>
+            </div>
+            
+            <form id="changeDateForm" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Nova Data</label>
+                    <input type="date" id="newDate" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Novo Horário</label>
+                    <select id="newTime" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all">
+                        <option value="">Selecione um horário</option>
+                        <option value="09:00">09:00</option>
+                        <option value="10:00">10:00</option>
+                        <option value="11:00">11:00</option>
+                        <option value="12:00">12:00</option>
+                        <option value="13:00">13:00</option>
+                        <option value="14:00">14:00</option>
+                        <option value="15:00">15:00</option>
+                        <option value="16:00">16:00</option>
+                        <option value="17:00">17:00</option>
+                        <option value="18:00">18:00</option>
+                    </select>
+                </div>
+                
+                <div class="flex space-x-3">
+                    <button type="button" onclick="hideChangeDateModal()" class="flex-1 bg-gray-300 text-gray-700 py-3 px-6 rounded-xl font-semibold hover:bg-gray-400 transition-colors">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="flex-1 bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-blue-700 transition-colors">
+                        Confirmar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'984c7d20e17901ab',t:'MTc1ODgyMzkzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
