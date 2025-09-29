@@ -812,3 +812,10 @@ const patients = {
                 document.getElementById('mobileMenu').classList.add('hidden');
             });
         });
+
+
+function scrollToServicos() {
+    document.getElementById('servicos').scrollIntoView({
+        behavior: 'smooth'
+    });
+}
